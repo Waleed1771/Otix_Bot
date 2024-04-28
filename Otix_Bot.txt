@@ -1,0 +1,567 @@
+# AI Source Code
+
+from telegram.ext import Updater, MessageHandler, Filters
+from transformers import pipeline
+
+# Initialize the AI model
+ai_model = pipeline("text-generation")
+
+# Define the bot function
+def bot(update, context):
+    # Get the user's message
+    user_message = update.message.text
+    # Generate a response using the AI model
+    bot_response = ai_model(user_message, max_length=50, do_sample=False)[0]['generated_text']
+    # Send the response back to the user
+    update.message.reply_text(bot_response)
+
+def main():
+    # Set up the Telegram bot
+    updater = Updater("7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0", use_context=True)
+    dp = updater.dispatcher
+
+    # Add the message handler
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, bot))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
+
+# Youtube Source Code
+
+import os
+import subprocess
+from telegram.ext import Updater, CommandHandler
+
+# Define the download function
+def download_video(update, context):
+    # Get the URL from the user's message
+    url = context.args[0]
+    # Use youtube-dl to download the video
+    subprocess.call(['youtube-dl', '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4', '-o', 'video.mp4', url])
+    # Send the downloaded video to the user
+    context.bot.send_video(chat_id=update.effective_chat.id, video=open('video.mp4', 'rb'))
+
+def main():
+    # Set up the Telegram bot
+    updater = Updater("7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0", use_context=True)
+    dp = updater.dispatcher
+
+    # Add command handler for /download command
+    dp.add_handler(CommandHandler("download", download_video))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
+
+# Instagram Video Source Code
+
+import requests
+from telegram.ext import Updater, CommandHandler
+
+# Define the download function
+def download_video(update, context):
+    # Get the URL from the user's message
+    url = context.args[0]
+    # Request the Instagram page
+    response = requests.get(url)
+    # Extract the video URL from the page source
+    video_url = extract_video_url(response.text)
+    # Send the video URL back to the user
+    context.bot.send_message(chat_id=update.effective_chat.id, text=video_url)
+
+# Define a function to extract the video URL from the Instagram page
+def extract_video_url(page_source):
+    # Implement your logic here to extract the video URL from the page source
+    # This can be done using regular expressions or an HTML parser
+    # For example:
+    # video_url = ...
+    # return video_url
+    pass
+
+def main():
+    # Set up the Telegram bot
+    updater = Updater("YOUR_TELEGRAM_BOT_TOKEN", use_context=True)
+    dp = updater.dispatcher
+
+    # Add command handler for /download command
+    dp.add_handler(CommandHandler("download", download_video))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
+
+# Instagram Picture Source Code
+
+import requests
+from bs4 import BeautifulSoup
+from telegram.ext import Updater, CommandHandler
+
+# Define the download function
+def download_picture(update, context):
+    # Get the URL from the user's message
+    url = context.args[0]
+    # Request the Instagram page
+    response = requests.get(url)
+    # Extract the picture URL from the page source
+    picture_url = extract_picture_url(response.text)
+    # Send the picture URL back to the user
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo=picture_url)
+
+# Define a function to extract the picture URL from the Instagram page
+def extract_picture_url(page_source):
+    soup = BeautifulSoup(page_source, 'html.parser')
+    # Find the meta tag with property og:image
+    meta_tag = soup.find('meta', property='og:image')
+    if meta_tag:
+        return meta_tag['content']
+    else:
+        return None
+
+def main():
+    # Set up the Telegram bot
+    updater = Updater("7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0", use_context=True)
+    dp = updater.dispatcher
+
+    # Add command handler for /download command
+    dp.add_handler(CommandHandler("download", download_picture))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
+
+# Thread Picture Source Code
+
+import requests
+from bs4 import BeautifulSoup
+from telegram.ext import Updater, CommandHandler
+
+# Define the download function
+def download_pictures(update, context):
+    # Get the URL from the user's message
+    url = context.args[0]
+    # Request the thread page
+    response = requests.get(url)
+    # Extract the picture URLs from the page source
+    picture_urls = extract_picture_urls(response.text)
+    # Send each picture URL back to the user
+    for picture_url in picture_urls:
+        context.bot.send_photo(chat_id=update.effective_chat.id, photo=picture_url)
+
+# Define a function to extract the picture URLs from the thread page
+def extract_picture_urls(page_source):
+    soup = BeautifulSoup(page_source, 'html.parser')
+    # Implement your logic here to extract the picture URLs from the page source
+    # This can be done by finding the relevant HTML elements containing the picture URLs
+    # For example:
+    # picture_urls = []
+    # for img_tag in soup.find_all('img'):
+    #     picture_urls.append(img_tag['src'])
+    # return picture_urls
+    pass
+
+def main():
+    # Set up the Telegram bot
+    updater = Updater("7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0", use_context=True)
+    dp = updater.dispatcher
+
+    # Add command handler for /download command
+    dp.add_handler(CommandHandler("download", download_pictures))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
+
+# Thread Video Source Code
+
+import requests
+from bs4 import BeautifulSoup
+from telegram.ext import Updater, CommandHandler
+
+# Define the download function
+def download_videos(update, context):
+    # Get the URL from the user's message
+    url = context.args[0]
+    # Request the thread page
+    response = requests.get(url)
+    # Extract the video URLs from the page source
+    video_urls = extract_video_urls(response.text)
+    # Send each video URL back to the user
+    for video_url in video_urls:
+        context.bot.send_video(chat_id=update.effective_chat.id, video=video_url)
+
+# Define a function to extract the video URLs from the thread page
+def extract_video_urls(page_source):
+    soup = BeautifulSoup(page_source, 'html.parser')
+    # Implement your logic here to extract the video URLs from the page source
+    # This can be done by finding the relevant HTML elements containing the video URLs
+    # For example:
+    # video_urls = []
+    # for video_tag in soup.find_all('video'):
+    #     video_urls.append(video_tag['src'])
+    # return video_urls
+    pass
+
+def main():
+    # Set up the Telegram bot
+    updater = Updater("7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0", use_context=True)
+    dp = updater.dispatcher
+
+    # Add command handler for /download command
+    dp.add_handler(CommandHandler("download", download_videos))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
+
+# X Video Source Code
+
+import urllib.request
+
+video_url = 'https://example.com/video.mp4'
+file_name = 'video.mp4'
+
+urllib.request.urlretrieve(video_url, file_name)
+
+# X Picture Source Code
+
+import urllib.request
+
+picture_url = 'https://example.com/image.jpg'
+file_name = 'image.jpg'
+
+urllib.request.urlretrieve(picture_url, file_name)
+
+# Pinterest Source Code
+
+from pinterest_downloader import Pinterest
+
+pinterest = Pinterest(email="your_email@example.com", password="your_password")
+pinterest.login()
+pinterest.download_board("username/board_name")
+pinterest-image-scraper
+from pinterest_image_scraper import PinterestImageScraper
+
+scraper = PinterestImageScraper("https://www.pinterest.com/username/board_name/")
+image_urls = scraper.scrape()
+
+# Snapchat Source Code
+
+import telegram
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import requests
+
+# Telegram bot token
+TOKEN = '7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0'
+
+# Initialize the bot
+bot = telegram.Bot(token=TOKEN)
+
+# Handler for messages containing Snapchat video URLs
+def snapchat_video_handler(update, context):
+    message = update.message.text
+    if 'snapchat.com' in message:
+        # Download the video
+        video_url = message  # Replace this with actual code to extract video URL
+        video_file = requests.get(video_url)
+        
+        # Send the video back to the user
+        update.message.reply_video(video=video_file.content)
+
+# Set up the message handler
+updater = Updater(TOKEN, use_context=True)
+dispatcher = updater.dispatcher
+snapchat_video_handler = MessageHandler(Filters.text & (~Filters.command), snapchat_video_handler)
+dispatcher.add_handler(snapchat_video_handler)
+
+# Start polling for updates
+updater.start_polling()
+
+# Facebook Source Code
+
+import telegram
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import requests
+
+# Telegram bot token
+TOKEN = '7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0'
+
+# Initialize the bot
+bot = telegram.Bot(token=TOKEN)
+
+# Handler for messages containing Snapchat video URLs
+def snapchat_video_handler(update, context):
+    message = update.message.text
+    if 'snapchat.com' in message:
+        # Download the video
+        video_url = message  # Replace this with actual code to extract video URL
+        video_file = requests.get(video_url)
+        
+        # Send the video back to the user
+        update.message.reply_video(video=video_file.content)
+
+# Set up the message handler
+updater = Updater(TOKEN, use_context=True)
+dispatcher = updater.dispatcher
+snapchat_video_handler = MessageHandler(Filters.text & (~Filters.command), snapchat_video_handler)
+dispatcher.add_handler(snapchat_video_handler)
+
+# Start polling for updates
+updater.start_polling()
+
+# Tumblr Video Source Code
+
+import telegram
+from telegram.ext import Updater, MessageHandler, Filters
+import requests
+from bs4 import BeautifulSoup
+
+# Telegram bot token
+TOKEN = "7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0"
+
+# Function to handle incoming messages
+def message_handler(update, context):
+    # Extract the URL from the incoming message
+    url = update.message.text
+    
+    # Check if the URL is from Tumblr
+    if "tumblr.com" in url:
+        # Send a message indicating that the download is in progress
+        update.message.reply_text("Downloading Tumblr video...")
+
+        # Parse the Tumblr page to extract the video URL
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        video_url = soup.find('meta', property='og:video')['content']
+        
+        # Download the video
+        video_data = requests.get(video_url).content
+
+        # Send the video file to the user
+        context.bot.send_video(chat_id=update.message.chat_id, video=video_data)
+    else:
+        # Send a message if the URL is not from Tumblr
+        update.message.reply_text("Please provide a valid Tumblr video URL.")
+
+# Create a Telegram bot updater
+updater = Updater(token=TOKEN, use_context=True)
+
+# Get the dispatcher to register handlers
+dispatcher = updater.dispatcher
+
+# Register a message handler
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, message_handler))
+
+# Start the bot
+updater.start_polling()
+updater.idle()
+
+# Tumblr GIFS & Pictures Source Code
+
+import telegram
+from telegram.ext import Updater, MessageHandler, Filters
+import requests
+from bs4 import BeautifulSoup
+
+# Telegram bot token
+TOKEN = "7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0"
+
+# Function to handle incoming messages
+def message_handler(update, context):
+    # Extract the URL from the incoming message
+    url = update.message.text
+    
+    # Check if the URL is from Tumblr
+    if "tumblr.com" in url:
+        # Send a message indicating that the download is in progress
+        update.message.reply_text("Downloading GIFs and pictures from Tumblr...")
+
+        # Parse the Tumblr page to extract GIF and picture URLs
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        gif_urls = [source['src'] for source in soup.find_all('source', type='image/gif')]
+        picture_urls = [img['src'] for img in soup.find_all('img')]
+
+        # Download and send GIFs
+        for gif_url in gif_urls:
+            gif_data = requests.get(gif_url).content
+            context.bot.send_document(chat_id=update.message.chat_id, document=gif_data)
+
+        # Download and send pictures
+        for picture_url in picture_urls:
+            picture_data = requests.get(picture_url).content
+            context.bot.send_photo(chat_id=update.message.chat_id, photo=picture_data)
+    else:
+        # Send a message if the URL is not from Tumblr
+        update.message.reply_text("Please provide a valid Tumblr URL.")
+
+# Create a Telegram bot updater
+updater = Updater(token=TOKEN, use_context=True)
+
+# Get the dispatcher to register handlers
+dispatcher = updater.dispatcher
+
+# Register a message handler
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, message_handler))
+
+# Start the bot
+updater.start_polling()
+updater.idle()
+
+# Reddit GIFS & Pictures Source Code
+
+import telegram
+from telegram.ext import Updater, MessageHandler, Filters
+import requests
+from bs4 import BeautifulSoup
+
+# Telegram bot token
+TOKEN = "7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt07110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0"
+
+# Function to handle incoming messages
+def message_handler(update, context):
+    # Extract the URL from the incoming message
+    url = update.message.text
+    
+    # Check if the URL is from Reddit
+    if "reddit.com" in url:
+        # Send a message indicating that the download is in progress
+        update.message.reply_text("Downloading GIFs and pictures from Reddit...")
+
+        # Parse the Reddit page to extract GIF and picture URLs
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        gif_urls = [source['src'] for source in soup.find_all('source', type='image/gif')]
+        picture_urls = [img['src'] for img in soup.find_all('img')]
+
+        # Download and send GIFs
+        for gif_url in gif_urls:
+            gif_data = requests.get(gif_url).content
+            context.bot.send_document(chat_id=update.message.chat_id, document=gif_data)
+
+        # Download and send pictures
+        for picture_url in picture_urls:
+            picture_data = requests.get(picture_url).content
+            context.bot.send_photo(chat_id=update.message.chat_id, photo=picture_data)
+    else:
+        # Send a message if the URL is not from Reddit
+        update.message.reply_text("Please provide a valid Reddit URL.")
+
+# Create a Telegram bot updater
+updater = Updater(token=TOKEN, use_context=True)
+
+# Get the dispatcher to register handlers
+dispatcher = updater.dispatcher
+
+# Register a message handler
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, message_handler))
+
+# Start the bot
+updater.start_polling()
+updater.idle()
+
+# Reddit Video Source Code
+
+import telegram
+from telegram.ext import Updater, MessageHandler, Filters
+import youtube_dl
+
+# Telegram bot token
+TOKEN = "7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0"
+
+# Function to handle incoming messages
+def message_handler(update, context):
+    # Extract the URL from the incoming message
+    url = update.message.text
+    
+    # Check if the URL is from Reddit
+    if "reddit.com" in url and "/comments/" in url:
+        # Send a message indicating that the download is in progress
+        update.message.reply_text("Downloading Reddit video...")
+
+        # Download Reddit video using youtube-dl
+        ydl_opts = {
+            'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+            'outtmpl': '%(title)s.%(ext)s',
+        }
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+
+        # Send the downloaded video to the user
+        context.bot.send_video(chat_id=update.message.chat_id, video=open(f"{title}.mp4", "rb"))
+    else:
+       
+# VK Picture Source Code
+
+import telegram
+from telegram.ext import Updater, MessageHandler, Filters
+import requests
+
+# Telegram bot token
+TOKEN = "7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0"
+
+# Function to handle incoming messages
+def message_handler(update, context):
+    # Extract the URL from the incoming message
+    url = update.message.text
+    
+    # Check if the URL is from VK
+
+# VK Video Source Code
+
+import telebot
+import requests
+
+# Initialize your Telegram bot
+bot = telebot.TeleBot("7110611214:AAGfbhNRsH4lZSt0eXeWJMUAT-b2a1pvzt0")
+
+# Define a function to handle the command for downloading VK videos
+@bot.message_handler(commands=['download_vk_video'])
+def download_vk_video(message):
+    # Extract the VK video URL from the message
+    vk_video_url = message.text.split(' ')[1]
+
+    # Send a message to notify the user that the download process has started
+    bot.send_message(message.chat.id, "Downloading VK video...")
+
+    try:
+        # Send a request to VK to get the video file
+        response = requests.get(vk_video_url)
+        # Assuming the direct video URL is returned in the response
+        video_url = response.url
+
+        # Download the video file
+        video_file = requests.get(video_url)
+
+        # Save the video file locally
+        with open("video.mp4", "wb") as file:
+            file.write(video_file.content)
+
+        # Send the downloaded video file to the user
+        with open("video.mp4", "rb") as file:
+            bot.send_video(message.chat.id, file)
+
+    except Exception as e:
+        # Handle any errors that occur during the download process
+        bot.send_message(message.chat.id, f"Error downloading VK video: {e}")
+
+# Start the bot
+bot.polling()
